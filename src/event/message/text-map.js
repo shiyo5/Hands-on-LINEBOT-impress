@@ -166,11 +166,11 @@ export const messageMap = {
     {
       type: 'imagemap',
       baseUrl:
-        'https://github.com/shiyo5/Hands-on-LINEBOT-impress/blob/master/media/imagemap.png?raw=true',
+        'https://github.com/shiyo5/Hands-on-LINEBOT-impress/blob/hands-on-branch/media/uruka.jpg?raw=true',
       altText: 'This is an imagemap',
       baseSize: {
-        width: 1686,
-        height: 948,
+        width: 600,
+        height: 600,
       },
       actions: [
         {
