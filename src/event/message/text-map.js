@@ -1,11 +1,30 @@
+import { get } from '../../request.js';
 // ユーザーのプロフィールを取得する関数
 const getUserProfile = (event, client) => client.getProfile(event.source.userId);
 
 // 受け取ったメッセージと返信するメッセージ(を返す関数)をマッピング
 export const messageMap = {
+
+
+  天気予報: async () => {
+    const weatherApiRes = (await get('https://www.jma.go.jp/bosai/forecast/data/forecast/070000.json')).data;
+    return {
+      type: 'text',
+      text: `[天気予報]
+      ${weatherApiRes}[0].timeSeries[0].timeDefines[0]: ${weatherApiRes[0].timeSeries[0].areas[2].weathers[0]}
+      ${weatherApiRes}[0].timeSeries[0].timeDefines[1]: ${weatherApiRes[0].timeSeries[0].areas[2].weathers[1]}
+      ${weatherApiRes}[0].timeSeries[0].timeDefines[2]: ${weatherApiRes[0].timeSeries[0].areas[2].weathers[2]}
+      `,
+    };
+  },
+
   こんにちは: () => ({
     type: 'text',
-    text: 'Hello, world',
+    text: 'こんにちは世界',
+  }),
+  おはよう: () => ({
+    type: 'text',
+    text: 'Good Morning',
   }),
   複数メッセージ: () => ([
     {
@@ -17,6 +36,75 @@ export const messageMap = {
       text: 'May I help you?',
     },
   ]),
+  予定: () => ({
+    type: 'text',
+    text: '何曜日?',
+    quickReply: {
+      items: [
+        {
+          type: 'action',
+          action: {
+            type: 'message',
+            text: '月曜',
+            label: '月曜日',
+          },
+        },
+        {
+          type: 'action',
+          action: {
+            type: 'message',
+            text: '火曜',
+            label: '火曜日',
+          },
+        },
+        {
+          type: 'action',
+          action: {
+            type: 'message',
+            text: '水曜',
+            label: '水曜日',
+          },
+        },
+        {
+          type: 'action',
+          action: {
+            type: 'message',
+            text: '木曜',
+            label: '木曜日',
+          },
+        },
+        {
+          type: 'action',
+          action: {
+            type: 'message',
+            text: '金曜',
+            label: '金曜日',
+          },
+        },
+      ]
+    }
+  }),
+  月曜: () => ({
+    type: 'text',
+    text: '微積',
+  }),//残りの曜日
+  火曜: () => ({
+    type: 'text',
+    text: '経済学'
+  }),
+  水曜: () => ({
+    type: 'text',
+    text: '半日',
+  }),
+  木曜: () => ({
+    type: 'text',
+    text: '重い',
+  }),
+  金曜: () => ({
+    type: 'text',
+    text: '健康科学',
+  }),
+
   クイックリプライ: () => ({
     type: 'text',
     text: 'クイックリプライ（以下のアクションはクイックリプライ専用で、他のメッセージタイプでは使用できません）',
@@ -78,7 +166,7 @@ export const messageMap = {
     {
       type: 'imagemap',
       baseUrl:
-        'https://github.com/shinbunbun/Hands-on-LINEBOT/blob/master/media/imagemap.png?raw=true',
+        'https://github.com/shiyo5/Hands-on-LINEBOT-impress/blob/master/media/imagemap.png?raw=true',
       altText: 'This is an imagemap',
       baseSize: {
         width: 1686,
@@ -93,7 +181,7 @@ export const messageMap = {
             width: 511,
             height: 585,
           },
-          linkUri: 'https://shinbunbun.info/about/',
+          linkUri: 'https://x.com/ow_uruca?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor',
         },
         {
           type: 'message',
@@ -281,78 +369,157 @@ export const messageMap = {
     type: 'flex',
     altText: 'Flex Message',
     contents: {
-      type: 'bubble',
-      header: {
-        type: 'box',
-        layout: 'vertical',
-        contents: [
-          {
-            type: 'text',
-            text: 'Flex Message',
-            color: '#FFFFFF',
-            weight: 'bold',
-          },
-        ],
-      },
-      hero: {
-        type: 'image',
-        url: 'https://pbs.twimg.com/profile_images/1236928986212478976/wDa51i9T_400x400.jpg',
-        size: 'xl',
-      },
-      body: {
-        type: 'box',
-        layout: 'vertical',
-        contents: [
-          {
-            type: 'text',
-            text: 'しんぶんぶん',
-            size: 'xl',
-            weight: 'bold',
-            align: 'center',
-          },
-          {
-            type: 'text',
-            text: '会津大学学部二年',
-            align: 'center',
-          },
-          {
-            type: 'separator',
-            margin: 'md',
-          },
-          {
-            type: 'box',
-            layout: 'vertical',
-            contents: [
-              {
-                type: 'button',
-                action: {
-                  type: 'uri',
-                  label: 'ホームページ',
-                  uri: 'https://shinbunbun.info/',
-                },
-                style: 'primary',
-                offsetBottom: '10px',
-              },
-              {
-                type: 'button',
-                action: {
-                  type: 'uri',
-                  label: 'Twitter',
-                  uri: 'https://twitter.com/shinbunbun_',
-                },
-                style: 'primary',
-                color: '#1DA1F2',
-              },
-            ],
-            paddingTop: '10px',
-          },
-        ],
-      },
-      styles: {
-        header: {
-          backgroundColor: '#008282',
+      "type": "bubble",
+      "hero": {
+        "type": "image",
+        "size": "full",
+        "aspectRatio": "20:13",
+        "aspectMode": "cover",
+        "action": {
+          "type": "uri",
+          "uri": "https://line.me/"
         },
+        "url": "https://pbs.twimg.com/profile_images/446704053/_____400x400.jpg"
       },
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "weight": "bold",
+            "size": "xl",
+            "text": "学祭実行委員会"
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "margin": "md",
+            "contents": [
+              {
+                "type": "icon",
+                "size": "sm",
+                "url": "https://soshosai.com/_astro/logo_img.125cd598.png"
+              },
+              {
+                "type": "icon",
+                "size": "sm",
+                "url": "https://soshosai.com/_astro/logo_img.125cd598.png"
+              },
+              {
+                "type": "icon",
+                "size": "sm",
+                "url": "https://soshosai.com/_astro/logo_img.125cd598.png"
+              },
+              {
+                "type": "icon",
+                "size": "sm",
+                "url": "https://soshosai.com/_astro/logo_img.125cd598.png"
+              },
+              {
+                "type": "icon",
+                "size": "sm",
+                "url": "https://soshosai.com/_astro/logo_img.125cd598.png"
+              },
+              {
+                "type": "text",
+                "size": "sm",
+                "color": "#999999",
+                "margin": "md",
+                "flex": 0,
+                "text": "学祭実行委員"
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "margin": "lg",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "baseline",
+                "spacing": "sm",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "Place",
+                    "color": "#aaaaaa",
+                    "size": "sm",
+                    "flex": 1
+                  },
+                  {
+                    "type": "text",
+                    "text": "〒965-8580 福島県会津若松市一箕町鶴賀,学生ホール3階左突き当たり",
+                    "wrap": true,
+                    "color": "#666666",
+                    "size": "sm",
+                    "flex": 5
+                  }
+                ]
+              },
+              {
+                "type": "box",
+                "layout": "baseline",
+                "spacing": "sm",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "Time",
+                    "color": "#aaaaaa",
+                    "size": "sm",
+                    "flex": 1
+                  },
+                  {
+                    "type": "text",
+                    "text": "All",
+                    "wrap": true,
+                    "color": "#666666",
+                    "size": "sm",
+                    "flex": 5
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "position": "relative"
+      },
+      "footer": {
+        "type": "box",
+        "layout": "vertical",
+        "spacing": "sm",
+        "contents": [
+          {
+            "type": "button",
+            "style": "link",
+            "height": "sm",
+            "action": {
+              "type": "uri",
+              "label": "UoA",
+              "uri": "https://u-aizu.ac.jp/"
+            }
+          },
+          {
+            "type": "button",
+            "style": "link",
+            "height": "sm",
+            "action": {
+              "type": "uri",
+              "uri": "https://x.com/soshosai?lang=en",
+              "label": "学祭実行委委員会"
+            }
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [],
+            "margin": "sm"
+          }
+        ],
+        "flex": 0
+      }
     },
   }),
   プロフィール: async (event, appContext) => {
